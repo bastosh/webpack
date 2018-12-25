@@ -3,6 +3,8 @@ const glob = require('glob');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const PurifyCSSPlugin = require("purifycss-webpack");
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
 module.exports = {
   entry: './src/js/app.js',
   output: {
@@ -28,7 +30,8 @@ module.exports = {
           MiniCssExtractPlugin.loader,
           "css-loader",
           "postcss-loader",
-          "sass-loader"],
+          "sass-loader"
+        ],
       },
     ],
   },
@@ -41,6 +44,7 @@ module.exports = {
     }),
     new PurifyCSSPlugin({ 
       paths: glob.sync(`src/**/*.js`, { nodir: true })
-    })
+    }),
+    new OptimizeCssAssetsPlugin()
   ],
 };
