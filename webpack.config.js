@@ -1,6 +1,8 @@
 const path = require('path');
+const glob = require('glob');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const PurifyCSSPlugin = require("purifycss-webpack");
 module.exports = {
   entry: './src/js/app.js',
   output: {
@@ -35,6 +37,9 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: "[name].css",
+    }),
+    new PurifyCSSPlugin({ 
+      paths: glob.sync(`src/**/*.js`, { nodir: true })
     })
   ],
 };
