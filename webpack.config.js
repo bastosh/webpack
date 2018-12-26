@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const PurifyCSSPlugin = require("purifycss-webpack");
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './src/js/app.js',
@@ -21,9 +22,7 @@ module.exports = {
             options: { minimize: false }
           }
         ]
-      }
-    ],
-    rules: [
+      },
       {
         test: /\.scss$/,
         use: [
@@ -33,6 +32,16 @@ module.exports = {
           "sass-loader"
         ],
       },
+      {
+        test: /\.(png|jp(e*)g|svg)$/,  
+        use: [{
+            loader: 'url-loader',
+            options: { 
+                limit: 25000, // Convert images < 25kb to base64 strings
+                name: 'images/[hash]-[name].[ext]'
+            } 
+        }]
+      }
     ],
   },
   plugins: [
@@ -45,6 +54,10 @@ module.exports = {
     new PurifyCSSPlugin({ 
       paths: glob.sync(`src/**/*.js`, { nodir: true })
     }),
-    new OptimizeCssAssetsPlugin()
+    new OptimizeCssAssetsPlugin(),
+    new CopyWebpackPlugin([{
+      from: 'src/assets/',
+      to: 'assets'
+    }])
   ],
 };
